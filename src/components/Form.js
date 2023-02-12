@@ -23,8 +23,9 @@ const Form = () => {
                     className="block text-gray-700 font-medium mb-2"
                     htmlFor="question1"
                 >
-                    Question 1
+                    What type of story do you prefer?
                 </label>
+                {/* options could include adventure, romance, mystery, etc. */}
                 <input
                     type="text"
                     id="question1"
@@ -39,7 +40,7 @@ const Form = () => {
                     className="block text-gray-700 font-medium mb-2"
                     htmlFor="question2"
                 >
-                    Question 2
+                    Which of the following describes your reading preferences?
                 </label>
                 <select
                     id="question2"
@@ -49,9 +50,10 @@ const Form = () => {
                     onChange={handleChange}
                 >
                     <option value="">Select an option</option>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
+                    <option value="option1">Romance and drama</option>
+                    <option value="option2">Action and adventure</option>
+                    <option value="option3">Science fiction and fantasy</option>
+                    <option value="option3">Mystery and suspense</option>
                 </select>
             </div>
             <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
