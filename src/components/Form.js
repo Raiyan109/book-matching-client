@@ -1,19 +1,44 @@
 import React, { useState } from "react";
-
+import { useBooksContext } from '../hooks/useBooksContext'
 const Form = () => {
-    const [formData, setFormData] = useState({
-        question1: "",
-        question2: ""
-    });
+    // const [formData, setFormData] = useState({
+    //     question1: "",
+    //     question2: ""
+    // });
 
-    const handleChange = e => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    // const handleChange = e => {
+    //     setFormData({ ...formData, [e.target.name]: e.target.value });
+    // };
 
-    const handleSubmit = e => {
+    const { dispatch } = useBooksContext()
+
+    const [title, setTitle] = useState('')
+    const [error, setError] = useState(null)
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Add logic here to submit form data to database
-        console.log(formData);
+        const book = { title }
+
+        const response = await fetch('/api/books', {
+            method: 'POST',
+            body: JSON.stringify(book),
+            headers: {
+                'content-type': 'application/json'
+            }
+        })
+        const json = await response.json()
+
+        if (!response.ok) {
+            setError(json.error)
+        }
+        if (response.ok) {
+            setTitle('')
+            setError(null)
+            dispatch({ type: 'CREATE_BOOKS', payload: json })
+            console.log('new book added', json)
+        }
+
     };
 
     return (
@@ -28,11 +53,11 @@ const Form = () => {
                 {/* options could include adventure, romance, mystery, etc. */}
                 <input
                     type="text"
-                    id="question1"
-                    name="question1"
+                    // id="question1"
+                    // name="question1"
                     className="w-full border border-gray-400 p-2"
-                    value={formData.question1}
-                    onChange={handleChange}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                 />
             </div>
             <div className="mb-4">
@@ -46,8 +71,8 @@ const Form = () => {
                     id="question2"
                     name="question2"
                     className="w-full border border-gray-400 p-2"
-                    value={formData.question2}
-                    onChange={handleChange}
+                // value={formData.question2}
+                // onChange={handleChange}
                 >
                     <option value="">Select an option</option>
                     <option value="option1">Romance and drama</option>
@@ -56,9 +81,10 @@ const Form = () => {
                     <option value="option3">Mystery and suspense</option>
                 </select>
             </div>
-            <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+            <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
                 Submit
             </button>
+            {error && <p className="text-red-900 font-bold">{error}</p>}
         </form>
     );
 };
